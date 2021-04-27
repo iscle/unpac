@@ -4,7 +4,6 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -54,9 +53,10 @@ static void print_unicode_as_ascii(const int16_t *str) {
 
 static char *unicode_to_ascii(const int16_t *in) {
     size_t len = 0;
-    while (((char) in[len]) != '\0') {
+
+    do {
         len++;
-    }
+    } while (((char) in[len - 1]) != '\0');
 
     char *out = malloc(len);
     if (out == NULL) {
