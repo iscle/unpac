@@ -86,14 +86,23 @@ static int create_file(char *out_path, char *filename, void *data, uint32_t len)
         strcpy(file_path, out_path);
     }
     strcat(file_path, filename);
-    printf("File: %s\n", file_path);
+    printf("File: %s, %u bytes\n", file_path, len);
 
     int fd = open(file_path, O_WRONLY | O_CREAT, 0644);
+    free(file_path);
+    file_path = NULL;
+
     if (fd < 0) {
         return -1;
     }
 
-    write(fd, data, len);
+    uint32_t chunks = len / 4096;
+    uint32_t remainder = len % 4096;
+
+    for (uint32_t i = 0; i < chunks; i++) {
+        write(fd, data + (i * 4096), 4096);
+    }
+    write(fd, data + (chunks * 4096), remainder);
 
     close(fd);
     return 0;
