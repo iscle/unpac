@@ -7,6 +7,7 @@ Unpack Spreadtrum/Unisoc ".pac" files to a specified folder.
     mkdir build  
     cd build  
     cmake ..
+    make
 
 ## Usage
 
